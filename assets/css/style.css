@@ -1,0 +1,315 @@
+/* GeoBIM — Auros Abyssal Architecture with Official GeoBIM Brand Palette */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400;1,9..40,500&display=swap');
+
+:root {
+  /* GeoBIM Official Brand Colors */
+  --geobim-gold: #E5B800;
+  --geobim-teal-deep: #2E5D61;
+  --geobim-teal-mid: #5E8588;
+  --geobim-sage: #A4B9BA;
+  --geobim-ice: #D9E2E3;
+  --geobim-white: #FFFFFF;
+
+  /* Auros Abyssal Surface Stack derived from GeoBIM Teal */
+  --color-abyss-canvas: #0B191B;
+  --color-abyss-deep: #071213;
+  --color-abyss-raised: #142E31;
+  --color-abyss-hover: #1B3C40;
+  --color-abyss-border: rgba(164, 185, 186, 0.15);
+
+  /* Signature Button Gradient (GeoBIM Gold Sunburst) */
+  --gradient-geobim-signature: linear-gradient(90deg, #E5B800 0%, #F5CE2D 45%, #FFE98A 100%);
+  --gradient-teal-glow: linear-gradient(90deg, #2E5D61 0%, #5E8588 60%, #E5B800 100%);
+
+  /* Typography (Matter / DM Sans) */
+  --font-matter: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-arial: 'Arial', system-ui, sans-serif;
+
+  /* Strict Auros Shape Vocabulary */
+  --radius-cards: 16px;
+  --radius-small: 6px;
+  --radius-buttons: 6px;
+}
+
+/* Base resets & typography */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-matter);
+  font-weight: 400;
+  background-color: var(--color-abyss-canvas);
+  color: var(--geobim-sage);
+  line-height: 1.4;
+}
+
+body {
+  background-color: #0B191B;
+  color: #A4B9BA;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar - Abyssal GeoBIM */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #071213;
+}
+::-webkit-scrollbar-thumb {
+  background: #2E5D61;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5E8588;
+}
+
+/* Headings: Strict 500 weight only, tight negative tracking, line-height 1.0 */
+h1, h2, h3, h4, h5, h6, .heading-matter {
+  font-family: var(--font-matter);
+  font-weight: 500 !important;
+  color: #FFFFFF;
+  line-height: 1.0;
+}
+
+.heading-display {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+}
+
+.heading-section {
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.heading-card {
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+/* Section label / Eyebrow: uppercase, tracking 0.08em - 0.15em, weight 500 */
+.eyebrow-label {
+  font-family: var(--font-matter);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #E5B800;
+}
+
+.eyebrow-label-sm {
+  font-family: var(--font-matter);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #A4B9BA;
+}
+
+/* Kinetic Background Text */
+.kinetic-text {
+  font-family: var(--font-matter);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.046em;
+  color: rgba(217, 226, 227, 0.035);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Statistics in Official GeoBIM Gold */
+.stat-number {
+  font-family: var(--font-matter);
+  font-weight: 500;
+  color: #E5B800;
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+}
+
+/* Signature Gradient Pill Button */
+.btn-signature {
+  background: var(--gradient-geobim-signature);
+  color: #071213 !important;
+  font-family: var(--font-arial);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.btn-signature:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+/* Filled Action Button in GeoBIM Teal */
+.btn-teal-action {
+  background-color: #142E31;
+  color: #FFFFFF;
+  font-family: var(--font-matter);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 12px 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 1px solid rgba(94, 133, 136, 0.3);
+}
+
+.btn-teal-action:hover {
+  background-color: #1B3C40;
+  color: #E5B800;
+  border-color: #E5B800;
+}
+
+/* Ghost Navigation Link */
+.nav-ghost-link {
+  font-family: var(--font-matter);
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #A4B9BA;
+  background: transparent;
+  border: none;
+  transition: color 0.2s ease;
+}
+
+.nav-ghost-link:hover, .nav-ghost-link.active {
+  color: #FFFFFF;
+}
+
+/* Arrow Icon Button */
+.btn-arrow-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(46, 93, 97, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  border: none;
+  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-arrow-icon:hover {
+  background: #E5B800;
+  color: #071213;
+  transform: translate(2px, -2px);
+}
+
+/* Surface Cards: Raised level (#142E31), 16px radius, NO drop shadows */
+.card-surface {
+  background-color: #142E31;
+  border-radius: 16px;
+  padding: 36px;
+  box-shadow: none !important;
+  border: none !important;
+  transition: background-color 0.25s ease;
+}
+
+.card-surface:hover {
+  background-color: #1B3C40;
+}
+
+/* Recessed Deep Surface: Deep level (#071213), 16px radius */
+.card-recessed {
+  background-color: #071213;
+  border-radius: 16px;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Feature Row Card: 16px radius, Auros feature listing */
+.card-feature-row {
+  background-color: rgba(20, 46, 49, 0.5);
+  border-radius: 16px;
+  padding: 36px 32px;
+  transition: background-color 0.2s ease;
+}
+
+.card-feature-row:hover {
+  background-color: #142E31;
+}
+
+/* Modal Window */
+.modal-overlay {
+  background-color: rgba(7, 18, 19, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-box {
+  background-color: #142E31;
+  border-radius: 16px;
+  box-shadow: none;
+  border: 1px solid rgba(164, 185, 186, 0.2);
+}
+
+/* Inputs in Auros style with GeoBIM palette */
+.input-auros {
+  background-color: #071213;
+  color: #FFFFFF;
+  border: 1px solid rgba(164, 185, 186, 0.25);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-family: var(--font-matter);
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  width: 100%;
+}
+
+.input-auros:focus {
+  outline: none;
+  border-color: #E5B800;
+}
+
+.input-auros::placeholder {
+  color: #5E8588;
+}
+
+/* 3D Particle Canvas */
+#hero-particle-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Watermark GeoBIM */
+.watermark-geobim {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.watermark-geobim img {
+  opacity: 0.045;
+  filter: contrast(1.15) brightness(1.1);
+  max-width: none;
+}
+

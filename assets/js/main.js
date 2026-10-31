@@ -1,0 +1,693 @@
+/**
+ * GeoBIM Soluciones Espaciales — Auros Abyssal Terminal Engine
+ * Theme: Abyssal terminal with GeoBIM official brand palette (#E5B800, #2E5D61, #5E8588, #A4B9BA, #D9E2E3, #FFFFFF)
+ */
+
+// Services Data Catalog (Full official brochure scope with technical reference images)
+const servicesData = {
+  'geo-topografia': {
+    category: 'SERVICIOS GEO',
+    title: 'Fotogrametría y Topografía',
+    image: 'assets/img/services/geo-topografia.jpg',
+    summary: 'Captura, procesamiento de alta precisión y modelado digital del relieve.',
+    description: 'Levantamientos y procesamiento avanzado de datos geoespaciales con tecnologías de última generación para obtener representaciones fidedignas de la superficie.',
+    items: [
+      'Procesamiento de ortomosaicos de alta resolución y modelos digitales (DEM / DTM / DSM)',
+      'Procesamiento y análisis multiespectral de imágenes satelitales',
+      'Topografía no convencional y levantamientos con drones (UAV / RPAS)',
+      'Clasificación, filtrado y vectorización de nube de puntos LiDAR'
+    ],
+    deliverables: 'Ortomosaicos georreferenciados (GeoTIFF), nubes de puntos (.LAS / .LAZ), curvas de nivel y memorias técnicas.',
+    applications: 'Minería, infraestructura vial, agricultura de precisión y estudios geotécnicos.'
+  },
+  'geo-cartografia': {
+    category: 'SERVICIOS GEO',
+    title: 'Cartografía y Modelos ANLA',
+    image: 'assets/img/services/cartografia-modelos-anla.png',
+    summary: 'Cartografía temática y estructuración bajo estándares normativos ANLA y POT.',
+    description: 'Estructuración integral de bases de datos espaciales y cartografía oficial para cumplimiento riguroso de autoridades ambientales y entes territoriales.',
+    items: [
+      'Cartografía para Planes de Ordenamiento Territorial (POT, PBOT, EOT)',
+      'Generación de cartografía base y temática digital y análoga',
+      'Actualización cartográfica catastral y temática',
+      'Elaboración del modelo de almacenamiento geográfico bajo especificaciones ANLA',
+      'Procesamiento, validación topológica y arquitectura de bases de datos geográficas (Geodatabases)'
+    ],
+    deliverables: 'File Geodatabases (GDB), capas Shapefile depuradas, salidas gráficas en PDF/DWG y diccionarios de datos.',
+    applications: 'Licenciamiento ambiental, consultorías de planeación territorial y entidades públicas.'
+  },
+  'geo-planeacion': {
+    category: 'SERVICIOS GEO',
+    title: 'Planeación Territorial y Cambio Climático',
+    image: 'assets/img/services/planeacion-cambio-climatico.png',
+    summary: 'Evaluación del entorno urbano y gestión del riesgo climático para ordenamiento.',
+    description: 'Consultoría técnica para la toma de decisiones territoriales sostenibles, evaluando la dinámica del espacio urbano y la resiliencia climática.',
+    items: [
+      'Incorporación del componente de cambio climático en instrumentos de planificación municipal',
+      'Estudios de dinámica urbana, crecimiento poblacional y densificación',
+      'Evaluación del entorno urbano, espacio público y déficit de equipamientos',
+      'Zonificación de aptitud y amenazas naturales para desarrollo territorial'
+    ],
+    deliverables: 'Documentos técnicos de soporte (DTS), mapas de vulnerabilidad y matrices de diagnóstico territorial.',
+    applications: 'Alcaldías, gobernaciones, secretarías de planeación y firmas consultoras.'
+  },
+  'geo-capacitacion': {
+    category: 'SERVICIOS GEO',
+    title: 'Capacitaciones Especializadas',
+    image: 'assets/img/services/capacitacion-especializada.jpg',
+    summary: 'Formación corporativa y consultoría estratégica en metodologías SIG y BIM.',
+    description: 'Transferencia de conocimiento técnico aplicado y diseño de flujos de trabajo eficientes para equipos de ingeniería, arquitectura y entidades gubernamentales.',
+    items: [
+      'Capacitación práctica en SIG (ArcGIS Pro, QGIS, bases de datos espaciales)',
+      'Capacitación en metodologías y software BIM (Autodesk Revit, Navisworks, gestión IFC)',
+      'Asesoría integral en desarrollo e implementación de sistemas SIG corporativos',
+      'Estandarización de protocolos y plantillas de trabajo para equipos técnicos'
+    ],
+    deliverables: 'Talleres prácticos in-situ o remotos, guías metodológicas paso a paso y certificación institucional.',
+    applications: 'Empresas de ingeniería, constructoras, universidades y equipos técnicos de proyectos.'
+  },
+  'geo-visualizacion': {
+    category: 'SERVICIOS GEO',
+    title: 'Geoportales y Dashboards',
+    image: 'assets/img/services/imagen-geovisor.jpg',
+    summary: 'Geovisores web interactivos y tableros de control para monitoreo continuo.',
+    description: 'Soluciones interactivas en la nube para democratizar el acceso a la información espacial y facilitar el seguimiento visual de indicadores de proyectos.',
+    items: [
+      'Desarrollo de geoportales y geovisores web dinámicos a medida',
+      'Creación de dashboards interactivos de control de proyectos territoriales y constructivos',
+      'Integración de capas multicriterio con filtros analíticos y consultas espaciales',
+      'Visualización de métricas en tiempo real para gerencia y toma de decisiones'
+    ],
+    deliverables: 'Aplicaciones web responsive, URLs seguras para clientes y paneles de visualización interactivos.',
+    applications: 'Supervisión de obras, difusión pública de proyectos, monitoreo ambiental y gestión de activos.'
+  },
+  'bim-arquitectura': {
+    category: 'SERVICIOS BIM',
+    title: 'Modelado Arquitectónico BIM',
+    image: 'assets/img/services/bim-arquitectura.png',
+    summary: 'Modelos digitales paramétricos de alta fidelidad para diseño y construcción.',
+    description: 'Desarrollo de modelos arquitectónicos detallados en entorno BIM (LOD 100 a LOD 400), asegurando coherencia constructiva, cuantificación precisa y planos ejecutivos.',
+    items: [
+      'Modelado 3D arquitectónico paramétrico bajo normativas constructivas',
+      'Generación automatizada de planos constructivos (cortes, fachadas, detalles)',
+      'Extracción de cantidades de obra y cómputos métricos confiables',
+      'Renderizado y recorridos virtuales para socialización del proyecto'
+    ],
+    deliverables: 'Archivos nativos .RVT / IFC, planimetría en PDF/DWG y tablas de planificación de materiales.',
+    applications: 'Estudios de arquitectura, inmobiliarias y constructoras.'
+  },
+  'bim-mep': {
+    category: 'SERVICIOS BIM',
+    title: 'Modelado de Redes MEP',
+    image: 'assets/img/services/bim-mep.png',
+    summary: 'Coordinación tridimensional de redes mecánicas, eléctricas y de plomería.',
+    description: 'Modelado riguroso de instalaciones técnicas para evitar interferencias en obra, optimizar trayectorias y garantizar la operatividad de las edificaciones.',
+    items: [
+      'Modelado de redes mecánicas y sistemas de ventilación/climatización (HVAC)',
+      'Modelado de canalizaciones eléctricas, bandejas portacables e iluminación',
+      'Modelado de redes hidrosanitarias, pluviales y sistemas contra incendio',
+      'Detección y resolución de colisiones (Clash Detection) con estructura y arquitectura'
+    ],
+    deliverables: 'Modelos MEP coordinados, informes de interferencias (Navisworks) y planos de taller.',
+    applications: 'Instaladores especializados, ingenierías MEP y gerencias de construcción.'
+  },
+  'bim-estructural': {
+    category: 'SERVICIOS BIM',
+    title: 'Modelado Estructural',
+    image: 'assets/img/services/bim-estructural.png',
+    summary: 'Digitalización precisa de elementos portantes de concreto y acero estructural.',
+    description: 'Creación de modelos estructurales coordinados con el cálculo de ingeniería, permitiendo el despiece de aceros, verificación de armados y análisis de constructabilidad.',
+    items: [
+      'Modelado de cimentaciones, columnas, vigas, losas y muros de concreto armado',
+      'Modelado de estructuras metálicas, perfiles, conexiones y rigidizadores',
+      'Despiece y cuantificación automatizada de acero de refuerzo',
+      'Coordinación con modelos arquitectónicos y pases para instalaciones'
+    ],
+    deliverables: 'Modelo estructural .RVT / IFC, cuadros de acero de refuerzo y planos estructurales coordinados.',
+    applications: 'Ingenieros calculistas, talleres de estructuras metálicas y constructoras.'
+  },
+  'bim-familias': {
+    category: 'SERVICIOS BIM',
+    title: 'Familias Paramétricas',
+    image: 'assets/img/services/bim-familias.png',
+    summary: 'Creación de librerías y componentes inteligentes a medida de fabricantes y obra.',
+    description: 'Desarrollo de familias paramétricas optimizadas para Revit, con metadatos técnicos, catálogo de dimensiones y comportamiento geométrico configurable.',
+    items: [
+      'Creación de familias paramétricas de mobiliario, equipos y carpintería',
+      'Modelado de catálogos comerciales para fabricantes de productos de construcción',
+      'Incorporación de parámetros compartidos para cómputos y especificaciones técnicas',
+      'Optimización del peso de los archivos para rendimiento fluido de modelos complejos'
+    ],
+    deliverables: 'Familias .RFA organizadas por categorías con parámetros técnicos y manual de uso.',
+    applications: 'Fabricantes de materiales, empresas de diseño de interiores y firmas de ingeniería.'
+  },
+  'geobim-entorno': {
+    category: 'SERVICIOS GEOBIM',
+    title: 'Análisis de Entorno BIM con SIG',
+    image: 'assets/img/services/geobim-entorno.png',
+    summary: 'Integración del modelo BIM en su contexto territorial y geográfico a escala real.',
+    description: 'Fusión de la escala de edificio (BIM) con la escala de territorio (SIG). Permite analizar el impacto de la infraestructura en el entorno circundante y la influencia del relieve en el diseño.',
+    items: [
+      'Georreferenciación precisa del modelo constructivo en coordenadas de proyección oficiales',
+      'Análisis de contexto espacial, visuales urbanas y asoleamiento en el entorno real',
+      'Integración de modelos tridimensionales en plataformas SIG como ArcGIS o Cesium',
+      'Simulación de volumen construido e integración con el perfil urbano existente'
+    ],
+    deliverables: 'Escenas 3D georreferenciadas, reportes de impacto volumétrico e integración BIM-GIS.',
+    applications: 'Desarrolladores urbanísticos, entidades de planificación y directores de proyectos.'
+  },
+  'geobim-ambiental': {
+    category: 'SERVICIOS GEOBIM',
+    title: 'Análisis Ambiental y Sostenibilidad',
+    image: 'assets/img/services/analisis-ambiental-sostenibilidad.png',
+    summary: 'Evaluación bioclimática, cuencas hídricas y condicionantes ecológicas.',
+    description: 'Estudios espaciales integrados para garantizar que el proyecto constructivo respete las determinantes ambientales, zonas de ronda y corredores biológicos.',
+    items: [
+      'Cruce de huella constructiva con áreas de protección, rondas hídricas y reservas forestales',
+      'Análisis de microcuencas, escorrentía superficial y afectaciones por drenajes naturales',
+      'Estudios de asoleamiento territorial y sombras proyectadas a lo largo de las estaciones',
+      'Aporte al cumplimiento de certificaciones de sostenibilidad (LEED, EDGE) mediante análisis espacial'
+    ],
+    deliverables: 'Mapas temáticos de restricciones ambientales, análisis de sombras 3D y matriz de cumplimiento ecológico.',
+    applications: 'Proyectos con certificación verde, licencias ambientales y planeación de parcelaciones.'
+  },
+  'geobim-movilidad': {
+    category: 'SERVICIOS GEOBIM',
+    title: 'Análisis de Accesibilidad y Movilidad',
+    image: 'assets/img/services/imagen-accesibilidad.jpg',
+    summary: 'Evaluación de redes de transporte, tiempos de desplazamiento y accesibilidad.',
+    description: 'Modelado de rutas de acceso al proyecto constructivo considerando la red vial circundante, transporte público, pendientes topográficas y flujos peatonales.',
+    items: [
+      'Análisis de isócronas (tiempos de desplazamiento a pie, bicicleta o vehículo)',
+      'Evaluación de accesibilidad universal y pendientes del terreno natural vs. accesos proyectados',
+      'Simulación de impacto vial y puntos críticos de congestión en las inmediaciones',
+      'Conectividad con nodos de transporte masivo y ciclorrutas'
+    ],
+    deliverables: 'Mapas de isócronas, diagramas de conectividad multimodal y estudios de accesibilidad.',
+    applications: 'Centros comerciales, hospitales, campus universitarios y proyectos de vivienda masiva.'
+  },
+  'geobim-servicios': {
+    category: 'SERVICIOS GEOBIM',
+    title: 'Infraestructura y Redes de Servicios',
+    image: 'assets/img/services/geobim-servicios.png',
+    summary: 'Conexión entre redes matrices externas y las acometidas del edificio BIM.',
+    description: 'Supervisión y cruce tridimensional entre las redes de servicios públicos del territorio (acueducto, alcantarillado, energía, gas) y el sistema MEP interno de la edificación.',
+    items: [
+      'Cruce de cotas de conexión entre redes matrices municipales y acometidas del proyecto',
+      'Evaluación de capacidad y distancia a puntos de empalme de servicios públicos',
+      'Mapeo subterráneo de interferencias entre infraestructura existente y nueva',
+      'Modelado integral para proyectos de infraestructura lineal (vías, acueductos, tendidos eléctricos)'
+    ],
+    deliverables: 'Perfil longitudinal de conexiones, planos de empalme 3D e informes de viabilidad de servicios.',
+    applications: 'Empresas de servicios públicos, consorcios viales y gerencias técnicas de obra.'
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Lucide Icons
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+
+  // Particle Sphere in GeoBIM Colors
+  initParticleSphere();
+
+  // Mobile menu
+  initMobileMenu();
+
+  // Header scroll appearance
+  initScrollHeader();
+
+  // Filter tabs
+  initServiceFilters();
+
+  // Service detail modal
+  initServiceModals();
+
+  // Contact form submission
+  initContactForm();
+
+  // Legal Modals & Cookie Banner
+  initLegalModals();
+  initCookieBanner();
+});
+
+/**
+ * 3D Particle Sphere Visual (GeoBIM Bioluminescent Data Orb)
+ * Rendered using GeoBIM brand colors (#E5B800, #2E5D61, #5E8588, #D9E2E3, #FFFFFF)
+ */
+function initParticleSphere() {
+  const canvas = document.getElementById('hero-particle-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+  let width, height;
+  let particles = [];
+  const particleCount = 1400;
+  const radius = 280;
+
+  // Colors strictly mapped to GeoBIM official brand palette
+  const colors = [
+    'rgba(229, 184, 0, 0.95)',     // GeoBIM Gold #E5B800
+    'rgba(245, 206, 45, 0.9)',     // Radiant Gold
+    'rgba(46, 93, 97, 0.85)',      // GeoBIM Deep Teal #2E5D61
+    'rgba(94, 133, 136, 0.85)',    // GeoBIM Mid Teal #5E8588
+    'rgba(217, 226, 227, 0.85)',   // GeoBIM Ice #D9E2E3
+    'rgba(255, 255, 255, 0.95)'    // Pure White
+  ];
+
+  function resize() {
+    const parent = canvas.parentElement;
+    width = parent.clientWidth;
+    height = Math.min(window.innerHeight * 0.85, 750);
+    canvas.width = width * window.devicePixelRatio;
+    canvas.height = height * window.devicePixelRatio;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+
+  function createParticles() {
+    particles = [];
+    for (let i = 0; i < particleCount; i++) {
+      const phi = Math.acos(-1 + (2 * i) / particleCount);
+      const theta = Math.sqrt(particleCount * Math.PI) * phi;
+
+      particles.push({
+        x: radius * Math.cos(theta) * Math.sin(phi),
+        y: radius * Math.sin(theta) * Math.sin(phi),
+        z: radius * Math.cos(phi),
+        baseX: radius * Math.cos(theta) * Math.sin(phi),
+        baseY: radius * Math.sin(theta) * Math.sin(phi),
+        baseZ: radius * Math.cos(phi),
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: Math.random() * 1.6 + 0.8
+      });
+    }
+  }
+
+  let angleX = 0;
+  let angleY = 0;
+  const rotSpeedX = 0.0015;
+  const rotSpeedY = 0.003;
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+
+    const cx = width / 2;
+    const cy = height / 2;
+
+    angleX += rotSpeedX;
+    angleY += rotSpeedY;
+
+    const cosX = Math.cos(angleX);
+    const sinX = Math.sin(angleX);
+    const cosY = Math.cos(angleY);
+    const sinY = Math.sin(angleY);
+
+    const fov = 420;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      // Rotate around Y
+      let x1 = p.baseX * cosY - p.baseZ * sinY;
+      let z1 = p.baseZ * cosY + p.baseX * sinY;
+
+      // Rotate around X
+      let y1 = p.baseY * cosX - z1 * sinX;
+      let z2 = z1 * cosX + p.baseY * sinX;
+
+      const scale = fov / (fov + z2 + 100);
+      const projX = cx + x1 * scale;
+      const projY = cy + y1 * scale;
+
+      const alpha = Math.max(0.12, (z2 + radius) / (radius * 2));
+      const pSize = Math.max(0.6, p.size * scale);
+
+      ctx.beginPath();
+      ctx.arc(projX, projY, pSize, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1.0;
+    animationFrameId = requestAnimationFrame(render);
+  }
+
+  resize();
+  createParticles();
+  render();
+
+  window.addEventListener('resize', () => {
+    resize();
+    createParticles();
+  });
+}
+
+/* Mobile Menu */
+function initMobileMenu() {
+  const toggleBtn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const navLinks = document.querySelectorAll('.mobile-nav-link');
+
+  if (!toggleBtn || !menu) return;
+
+  toggleBtn.addEventListener('click', () => {
+    const isHidden = menu.classList.contains('hidden');
+    if (isHidden) {
+      menu.classList.remove('hidden');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    } else {
+      menu.classList.add('hidden');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+/* Header scroll */
+function initScrollHeader() {
+  const header = document.getElementById('site-header');
+  if (!header) return;
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      header.classList.add('bg-[#071213]/95', 'backdrop-blur-md');
+      header.classList.remove('bg-transparent');
+    } else {
+      header.classList.remove('bg-[#071213]/95', 'backdrop-blur-md');
+      header.classList.add('bg-transparent');
+    }
+  });
+}
+
+/* Service filter tabs */
+function initServiceFilters() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const serviceCards = document.querySelectorAll('.service-card');
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      filterButtons.forEach(b => {
+        b.classList.remove('bg-[#142E31]', 'text-[#E5B800]');
+        b.classList.add('text-[#A4B9BA]');
+      });
+      btn.classList.add('bg-[#142E31]', 'text-[#E5B800]');
+      btn.classList.remove('text-[#A4B9BA]');
+
+      serviceCards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        if (filter === 'all' || category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+}
+
+/* Service Modals */
+function initServiceModals() {
+  const modal = document.getElementById('service-modal');
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  const modalClose = document.getElementById('modal-close');
+  const modalQuoteBtn = document.getElementById('modal-quote-btn');
+
+  document.querySelectorAll('.btn-service-detail').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const serviceKey = btn.getAttribute('data-service');
+      openModal(serviceKey);
+    });
+  });
+
+  // Enable opening service modal by clicking anywhere on the service card
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+      const btn = card.querySelector('.btn-service-detail');
+      if (btn) {
+        const serviceKey = btn.getAttribute('data-service');
+        openModal(serviceKey);
+      }
+    });
+  });
+
+  function openModal(serviceKey) {
+    const data = servicesData[serviceKey];
+    if (!data) return;
+
+    document.getElementById('modal-title').textContent = data.title;
+    document.getElementById('modal-badge').textContent = data.category;
+    document.getElementById('modal-desc').textContent = data.description;
+    document.getElementById('modal-deliverables').textContent = data.deliverables;
+    document.getElementById('modal-apps').textContent = data.applications;
+
+    // Technical Reference Image
+    const modalImg = document.getElementById('modal-img');
+    const modalImgContainer = document.getElementById('modal-img-container');
+    if (modalImg && modalImgContainer) {
+      if (data.image) {
+        modalImg.src = data.image;
+        modalImg.alt = data.title;
+        modalImgContainer.classList.remove('hidden');
+      } else {
+        modalImgContainer.classList.add('hidden');
+      }
+    }
+
+    const itemsList = document.getElementById('modal-items');
+    itemsList.innerHTML = '';
+    data.items.forEach(item => {
+      const li = document.createElement('li');
+      li.className = 'flex items-start text-sm text-[#A4B9BA] leading-relaxed';
+      li.innerHTML = `
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#E5B800] mr-3 mt-2 flex-shrink-0"></span>
+        <span>${item}</span>
+      `;
+      itemsList.appendChild(li);
+    });
+
+    modalQuoteBtn.setAttribute('data-target-service', serviceKey);
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+  if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  if (modalQuoteBtn) {
+    modalQuoteBtn.addEventListener('click', () => {
+      const serviceKey = modalQuoteBtn.getAttribute('data-target-service');
+      closeModal();
+
+      const select = document.getElementById('form-service');
+      if (select && serviceKey) {
+        select.value = serviceKey;
+      }
+
+      const contactSection = document.getElementById('contacto');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+  // Global trigger for Geoportal scroll
+  window.openGeoportalModal = function() {
+    const target = document.getElementById('geoportal');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Global trigger for Geoportal modules (scroll smoothly into view)
+  window.openGeoportalModule = function(moduleType) {
+    const target = document.getElementById('geoportal');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+}
+
+/* Contact form */
+function initContactForm() {
+  const form = document.getElementById('quote-form');
+  const statusMsg = document.getElementById('form-status');
+  const submitBtn = document.getElementById('submit-btn');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = form.nombre.value.trim();
+    const email = form.email.value.trim();
+    const phone = form.telefono.value.trim();
+    const serviceSelect = form.servicio;
+    const serviceText = serviceSelect.options[serviceSelect.selectedIndex]?.text || '';
+    const message = form.mensaje.value.trim();
+    const terminosCheck = document.getElementById('ley-1581-check');
+
+    if (!name || !email || !phone || !message) {
+      showStatus('Por favor completa todos los campos requeridos (*): Nombre, Correo y Teléfono.', 'error');
+      return;
+    }
+
+    if (terminosCheck && !terminosCheck.checked) {
+      showStatus('Debe autorizar el tratamiento de datos personales conforme a la Ley 1581 de 2012 para transmitir su solicitud.', 'error');
+      terminosCheck.focus();
+      return;
+    }
+
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `TRANSMITIENDO SOLICITUD...`;
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+
+      if (response.status === 200 && result.success) {
+        showStatus('Solicitud recibida exitosamente. Nuestro equipo técnico responderá en menos de 24 horas hábiles.', 'success');
+        form.reset();
+      } else {
+        triggerMailto(name, email, phone, serviceText, message);
+        showStatus('Se ha abierto su cliente de correo para enviar directamente a info@solucionesgeobim.com.', 'info');
+      }
+    } catch (err) {
+      triggerMailto(name, email, phone, serviceText, message);
+      showStatus('Se ha abierto su cliente de correo para enviar directamente a info@solucionesgeobim.com.', 'info');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    }
+  });
+
+  function triggerMailto(name, email, phone, service, message) {
+    const subject = encodeURIComponent(`Solicitud Proyecto GeoBIM: ${service} - ${name}`);
+    const body = encodeURIComponent(
+      `Nombre: ${name}\n` +
+      `Email: ${email}\n` +
+      `Teléfono: ${phone}\n` +
+      `Servicio: ${service}\n\n` +
+      `Detalles del proyecto:\n${message}\n\n` +
+      `Consentimiento Ley 1581 de 2012: Autorizado por el titular.`
+    );
+    window.location.href = `mailto:info@solucionesgeobim.com?subject=${subject}&body=${body}`;
+  }
+
+  function showStatus(text, type) {
+    if (!statusMsg) return;
+    statusMsg.classList.remove('hidden', 'bg-red-950/60', 'text-red-300', 'bg-[#142E31]', 'text-[#E5B800]');
+    if (type === 'error') {
+      statusMsg.classList.add('bg-red-950/60', 'text-red-300');
+    } else {
+      statusMsg.classList.add('bg-[#142E31]', 'text-[#E5B800]');
+    }
+    statusMsg.textContent = text;
+  }
+}
+
+/* Legal Modals (Ley 1581 Data Protection & Cookies Policy) */
+function initLegalModals() {
+  const dataPolicyModal = document.getElementById('data-policy-modal');
+  const cookiesModal = document.getElementById('cookies-modal');
+
+  window.openDataPolicyModal = function() {
+    if (dataPolicyModal) {
+      dataPolicyModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  window.closeDataPolicyModal = function() {
+    if (dataPolicyModal) {
+      dataPolicyModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  };
+
+  window.openCookiesPolicyModal = function() {
+    if (cookiesModal) {
+      cookiesModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  window.closeCookiesPolicyModal = function() {
+    if (cookiesModal) {
+      cookiesModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  };
+
+  // Close modals on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeDataPolicyModal();
+      closeCookiesPolicyModal();
+    }
+  });
+}
+
+/* Cookie Consent Banner */
+function initCookieBanner() {
+  const banner = document.getElementById('cookie-banner');
+  if (!banner) return;
+
+  const consent = localStorage.getItem('geobim_cookies_consent');
+  if (!consent) {
+    // Short delay for fluid appearance after initial hero animation
+    setTimeout(() => {
+      banner.classList.remove('hidden');
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }, 1200);
+  }
+
+  const acceptAllBtn = document.getElementById('cookie-accept-all');
+  const acceptEssBtn = document.getElementById('cookie-accept-essential');
+
+  if (acceptAllBtn) {
+    acceptAllBtn.addEventListener('click', () => {
+      localStorage.setItem('geobim_cookies_consent', 'all');
+      banner.classList.add('hidden');
+    });
+  }
+
+  if (acceptEssBtn) {
+    acceptEssBtn.addEventListener('click', () => {
+      localStorage.setItem('geobim_cookies_consent', 'essential');
+      banner.classList.add('hidden');
+    });
+  }
+}
