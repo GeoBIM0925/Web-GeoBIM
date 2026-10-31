@@ -238,7 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * 3D Particle Sphere Visual (GeoBIM Bioluminescent Data Orb)
- * Fully responsive: adaptive radius & particle count, mouse tilt on desktop, touch drag on mobile.
+ * Rendered using GeoBIM brand colors (#E5B800, #2E5D61, #5E8588, #D9E2E3, #FFFFFF)
+ * Maintains continuous perpetual rotation across mobile and desktop.
  */
 function initParticleSphere() {
   const canvas = document.getElementById('hero-particle-canvas');
@@ -248,8 +249,8 @@ function initParticleSphere() {
   let animationFrameId;
   let width, height;
   let particles = [];
-  let particleCount = 1350;
-  let radius = 270;
+  const particleCount = 1400;
+  let radius = 280;
 
   // Colors strictly mapped to GeoBIM official brand palette
   const colors = [
@@ -264,14 +265,9 @@ function initParticleSphere() {
   function resize() {
     const parent = canvas.parentElement;
     width = parent.clientWidth;
-    height = Math.min(window.innerHeight * 0.88, 760);
-
-    const isMobile = width < 768;
-    particleCount = isMobile ? 650 : 1350;
-    // Keep radius in bounds so it never overflows small screens
-    radius = isMobile ? Math.min(width * 0.38, 160) : Math.min(width * 0.22, 275);
-
-    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2 for mobile battery efficiency
+    height = Math.min(window.innerHeight * 0.85, 750);
+    radius = width < 640 ? Math.min(width * 0.38, 280) : 280;
+    const dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     canvas.style.width = width + 'px';
@@ -291,58 +287,15 @@ function initParticleSphere() {
         baseY: radius * Math.sin(theta) * Math.sin(phi),
         baseZ: radius * Math.cos(phi),
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: Math.random() * 1.5 + 0.8
+        size: Math.random() * 1.6 + 0.8
       });
     }
   }
 
   let angleX = 0;
   let angleY = 0;
-  let targetAngleX = 0;
-  let targetAngleY = 0;
   const rotSpeedX = 0.0015;
   const rotSpeedY = 0.003;
-
-  // Interactive mouse tilt on desktop
-  window.addEventListener('mousemove', (e) => {
-    if (window.innerWidth >= 768) {
-      const rect = canvas.getBoundingClientRect();
-      if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
-        const mouseX = (e.clientX - rect.left - width / 2) / (width / 2);
-        const mouseY = (e.clientY - rect.top - height / 2) / (height / 2);
-        targetAngleY = mouseX * 0.35;
-        targetAngleX = -mouseY * 0.25;
-      }
-    }
-  }, { passive: true });
-
-  // Interactive touch rotation on mobile
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let isDragging = false;
-
-  canvas.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      isDragging = true;
-    }
-  }, { passive: true });
-
-  canvas.addEventListener('touchmove', (e) => {
-    if (isDragging && e.touches.length === 1) {
-      const deltaX = e.touches[0].clientX - touchStartX;
-      const deltaY = e.touches[0].clientY - touchStartY;
-      angleY += deltaX * 0.004;
-      angleX += deltaY * 0.004;
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    }
-  }, { passive: true });
-
-  canvas.addEventListener('touchend', () => {
-    isDragging = false;
-  }, { passive: true });
 
   function render() {
     ctx.clearRect(0, 0, width, height);
@@ -350,8 +303,9 @@ function initParticleSphere() {
     const cx = width / 2;
     const cy = height / 2;
 
-    angleX += rotSpeedX + (targetAngleX - angleX) * 0.03;
-    angleY += rotSpeedY + (targetAngleY - angleY) * 0.03;
+    // Continuous uninterrupted rotation
+    angleX += rotSpeedX;
+    angleY += rotSpeedY;
 
     const cosX = Math.cos(angleX);
     const sinX = Math.sin(angleX);
@@ -393,13 +347,9 @@ function initParticleSphere() {
   createParticles();
   render();
 
-  let resizeTimeout;
   window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      resize();
-      createParticles();
-    }, 150);
+    resize();
+    createParticles();
   });
 }
 
@@ -669,23 +619,19 @@ function initServiceModals() {
     });
   }
 
-  // Global trigger for Geoportal modules (scroll smoothly and select service)
-  window.openGeoportalModule = function(moduleType) {
-    const serviceMap = {
-      'geopot': 'geo-cartografia',
-      'satelital': 'geo-visualizacion',
-      'geobim': 'geobim-entorno'
-    };
-
-    const targetService = serviceMap[moduleType] || 'geo-visualizacion';
-    const select = document.getElementById('form-service');
-    if (select) {
-      select.value = targetService;
+  // Global trigger for Geoportal scroll
+  window.openGeoportalModal = function() {
+    const target = document.getElementById('geoportal');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
     }
+  };
 
-    const contactSection = document.getElementById('contacto');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
+  // Global trigger for Geoportal modules (scroll smoothly into view)
+  window.openGeoportalModule = function(moduleType) {
+    const target = document.getElementById('geoportal');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
     }
   };
 }
