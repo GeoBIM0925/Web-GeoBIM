@@ -33,6 +33,10 @@
 }
 
 /* Base resets & typography */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
   font-family: var(--font-matter);
@@ -40,17 +44,26 @@ html {
   background-color: var(--color-abyss-canvas);
   color: var(--geobim-sage);
   line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background-color: #0B191B;
   color: #A4B9BA;
   overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* Target sections smooth scroll clearance under fixed header (80px) */
+section {
+  scroll-margin-top: 5rem;
 }
 
 /* Custom Scrollbar - Abyssal GeoBIM */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #071213;
@@ -63,28 +76,39 @@ body {
   background: #5E8588;
 }
 
-/* Headings: Strict 500 weight only, tight negative tracking, line-height 1.0 */
+/* Hide scrollbar utility for mobile swiper tabs */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Headings: Strict 500 weight only, tight negative tracking, line-height 1.0 - 1.05 */
 h1, h2, h3, h4, h5, h6, .heading-matter {
   font-family: var(--font-matter);
   font-weight: 500 !important;
   color: #FFFFFF;
-  line-height: 1.0;
-}
-
-.heading-display {
-  font-size: clamp(2.5rem, 6vw, 5.5rem);
-  letter-spacing: -0.04em;
-  line-height: 1.0;
-}
-
-.heading-section {
-  font-size: clamp(1.8rem, 4vw, 2.75rem);
-  letter-spacing: -0.035em;
   line-height: 1.05;
 }
 
+.heading-display {
+  font-size: clamp(2.2rem, 5.5vw, 5.25rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  word-break: break-word;
+}
+
+.heading-section {
+  font-size: clamp(1.65rem, 3.8vw, 2.75rem);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  word-break: break-word;
+}
+
 .heading-card {
-  font-size: 24px;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
@@ -92,11 +116,13 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
 /* Section label / Eyebrow: uppercase, tracking 0.08em - 0.15em, weight 500 */
 .eyebrow-label {
   font-family: var(--font-matter);
-  font-size: 12px;
+  font-size: clamp(10px, 1.2vw, 12px);
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   color: #E5B800;
+  display: inline-flex;
+  align-items: center;
 }
 
 .eyebrow-label-sm {
@@ -117,6 +143,7 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   color: rgba(217, 226, 227, 0.035);
   user-select: none;
   pointer-events: none;
+  white-space: nowrap;
 }
 
 /* Statistics in Official GeoBIM Gold */
@@ -133,25 +160,32 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   background: var(--gradient-geobim-signature);
   color: #071213 !important;
   font-family: var(--font-arial);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   border-radius: 6px;
-  padding: 12px 24px;
+  padding: 12px 22px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
   border: none;
   cursor: pointer;
   box-shadow: none !important;
+  text-decoration: none;
+  touch-action: manipulation;
 }
 
 .btn-signature:hover {
   transform: translateY(-1px);
-  filter: brightness(1.05);
+  filter: brightness(1.06);
+}
+
+.btn-signature:active {
+  transform: translateY(0);
 }
 
 /* Filled Action Button in GeoBIM Teal */
@@ -159,16 +193,19 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   background-color: #142E31;
   color: #FFFFFF;
   font-family: var(--font-matter);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   border-radius: 6px;
-  padding: 12px 22px;
+  padding: 11px 20px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  border: 1px solid rgba(94, 133, 136, 0.3);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  border: 1px solid rgba(94, 133, 136, 0.35);
+  touch-action: manipulation;
+  cursor: pointer;
 }
 
 .btn-teal-action:hover {
@@ -177,41 +214,85 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   border-color: #E5B800;
 }
 
-/* Ghost Navigation Link */
+/* Ghost Navigation Link with Animated Indicator */
 .nav-ghost-link {
   font-family: var(--font-matter);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: #A4B9BA;
   background: transparent;
   border: none;
   transition: color 0.2s ease;
+  padding: 8px 0;
+  position: relative;
+  text-decoration: none;
 }
 
-.nav-ghost-link:hover, .nav-ghost-link.active {
+.nav-ghost-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--geobim-gold);
+  transition: width 0.25s ease;
+  border-radius: 1px;
+}
+
+.nav-ghost-link:hover,
+.nav-ghost-link.active {
   color: #FFFFFF;
+}
+
+.nav-ghost-link.active::after,
+.nav-ghost-link:hover::after {
+  width: 100%;
+}
+
+/* Mobile Nav Links */
+.mobile-nav-link {
+  font-family: var(--font-matter);
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #D9E2E3;
+  padding: 12px 14px;
+  border-radius: 6px;
+  display: block;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background-color: #142E31;
+  color: #E5B800;
 }
 
 /* Arrow Icon Button */
 .btn-arrow-icon {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 6px;
-  background: rgba(46, 93, 97, 0.5);
+  background: rgba(46, 93, 97, 0.55);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  border: none;
+  border: 1px solid rgba(229, 184, 0, 0.15);
   flex-shrink: 0;
-  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
 }
 
 .btn-arrow-icon:hover {
   background: #E5B800;
   color: #071213;
+  border-color: #E5B800;
   transform: translate(2px, -2px);
 }
 
@@ -219,14 +300,21 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
 .card-surface {
   background-color: #142E31;
   border-radius: 16px;
-  padding: 36px;
+  padding: 32px;
   box-shadow: none !important;
-  border: none !important;
-  transition: background-color 0.25s ease;
+  border: 1px solid rgba(164, 185, 186, 0.12) !important;
+  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+@media (max-width: 640px) {
+  .card-surface {
+    padding: 24px 20px;
+  }
 }
 
 .card-surface:hover {
-  background-color: #1B3C40;
+  background-color: #18373B;
+  border-color: rgba(229, 184, 0, 0.3) !important;
 }
 
 /* Recessed Deep Surface: Deep level (#071213), 16px radius */
@@ -234,24 +322,33 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   background-color: #071213;
   border-radius: 16px;
   box-shadow: none !important;
-  border: none !important;
+  border: 1px solid rgba(164, 185, 186, 0.1) !important;
 }
 
 /* Feature Row Card: 16px radius, Auros feature listing */
 .card-feature-row {
-  background-color: rgba(20, 46, 49, 0.5);
+  background-color: rgba(20, 46, 49, 0.6);
   border-radius: 16px;
-  padding: 36px 32px;
-  transition: background-color 0.2s ease;
+  padding: 28px 28px;
+  border: 1px solid rgba(164, 185, 186, 0.12);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+@media (max-width: 640px) {
+  .card-feature-row {
+    padding: 20px 18px;
+  }
 }
 
 .card-feature-row:hover {
   background-color: #142E31;
+  border-color: rgba(229, 184, 0, 0.35);
+  transform: translateY(-1px);
 }
 
 /* Modal Window */
 .modal-overlay {
-  background-color: rgba(7, 18, 19, 0.85);
+  background-color: rgba(7, 18, 19, 0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -259,8 +356,9 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
 .modal-box {
   background-color: #142E31;
   border-radius: 16px;
-  box-shadow: none;
-  border: 1px solid rgba(164, 185, 186, 0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(164, 185, 186, 0.25);
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Inputs in Auros style with GeoBIM palette */
@@ -271,14 +369,22 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   border-radius: 6px;
   padding: 12px 16px;
   font-family: var(--font-matter);
-  font-size: 14px;
-  transition: border-color 0.2s ease;
+  font-size: 16px; /* Prevents auto-zoom in iOS Safari */
+  line-height: 1.4;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
+}
+
+@media (min-width: 640px) {
+  .input-auros {
+    font-size: 14px;
+  }
 }
 
 .input-auros:focus {
   outline: none;
   border-color: #E5B800;
+  box-shadow: 0 0 0 1px rgba(229, 184, 0, 0.35);
 }
 
 .input-auros::placeholder {
@@ -291,8 +397,14 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  pointer-events: none;
+  pointer-events: auto;
   z-index: 1;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+#hero-particle-canvas:active {
+  cursor: grabbing;
 }
 
 /* Watermark GeoBIM */
@@ -305,6 +417,7 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  will-change: transform;
 }
 
 .watermark-geobim img {
@@ -313,3 +426,19 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   max-width: none;
 }
 
+/* Floating Back to Top */
+#back-to-top {
+  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
+}
+
+#back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#back-to-top.hidden-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+}

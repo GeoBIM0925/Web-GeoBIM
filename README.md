@@ -4,6 +4,15 @@ Plataforma web institucional y de servicios técnicos especializados para **GeoB
 
 ---
 
+## 📌 Historial de Versiones
+
+- **Versión 1.0 (`v1.0` / `v1.0-release`):** Lanzamiento oficial con catálogo completo de 13 servicios técnicos especializados, equipo multidisciplinario, caso de éxito con CA Ingeniería y Consultoría (especificaciones ANLA Res. 2180), módulos de Geoportal territorial, pasarela de contacto Web3Forms y marco legal colombiano (Ley 1581 de 2012 y política de cookies).
+- **Versión 1.1 (Optimización Multi-dispositivo):** 
+  - **Móvil (Mobile-first):** Menú de navegación tipo drawer con blur abyssal y bloqueo de scroll, prevención de auto-zoom en iOS Safari (`font-size: 16px`), filtros de servicios con scroll horizontal swipeable (`no-scrollbar`), esfera 3D adaptativa en radio y conteo de partículas con interacción táctil (touch drag), targets táctiles accesibles (≥44px), enlaces directos nativos a WhatsApp y llamadas telefónicas.
+  - **Computador (Desktop):** ScrollSpy sincronizado con indicador animado en la barra fija de navegación, rotación 3D de partículas reactiva al cursor del ratón (tilt holográfico), botón flotante para retorno rápido al inicio (*Back to top*), tarjetas y modales con transiciones fluidas.
+
+---
+
 ## 🧭 Estructura del Proyecto
 
 ```text
@@ -21,6 +30,7 @@ Web GeoBIM/
 ├── politica_cookies.md          # Política de Tratamiento de Cookies (RGPD / Guía SIC)
 ├── politica_tratamiento_datos_ley1581.md # Política de Habeas Data (Ley 1581 de 2012)
 ├── iniciar_servidor.bat         # Script rápido para servidor local en puerto 8000
+├── subir_a_github.bat           # Script para sincronización y push a repositorio GitHub
 └── .gitignore                   # Exclusiones de Git
 ```
 
@@ -44,7 +54,7 @@ Diseñado con una estética técnica de alta precisión (*Auros Dark*):
 
 - **HTML5 Semántico + Tailwind CSS (v3 CDN):** Maquetación responsiva y utility-first.
 - **Lucide Icons:** Iconografía vectorial técnica y limpia.
-- **HTML5 Canvas:** Esfera bioluminiscente interactiva de partículas 3D.
+- **HTML5 Canvas:** Esfera bioluminiscente interactiva de partículas 3D adaptativa.
 - **Web3Forms API:** Recepción directa y segura de prospectos en `info@solucionesgeobim.com` sin abrir clientes de correo.
 - **Cumplimiento Legal Colombiano:**
   - Checkbox obligatorio y modal para la **Ley 1581 de 2012** (Tratamiento de Datos Personales).
