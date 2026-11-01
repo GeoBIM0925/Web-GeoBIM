@@ -225,6 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Service detail modal
   initServiceModals();
 
+  // Multi-select service field
+  initMultiSelectService();
+
+  // Success Confirmation Modal
+  initSuccessModal();
+
   // Contact form submission
   initContactForm();
 
@@ -605,9 +611,8 @@ function initServiceModals() {
       const serviceKey = modalQuoteBtn.getAttribute('data-target-service');
       closeModal();
 
-      const select = document.getElementById('form-service');
-      if (select && serviceKey) {
-        select.value = serviceKey;
+      if (window.selectServiceInMultiSelect && serviceKey) {
+        window.selectServiceInMultiSelect(serviceKey);
       }
 
       const contactSection = document.getElementById('contacto');
@@ -635,6 +640,189 @@ function initServiceModals() {
 }
 
 /**
+ * Multi-Select Service Component
+ * Allows selecting multiple divisions/services with live counters, badges and tags.
+ */
+function initMultiSelectService() {
+  const container = document.getElementById('multiselect-container');
+  const triggerBtn = document.getElementById('service-select-btn');
+  const dropdown = document.getElementById('service-dropdown');
+  const chevron = document.getElementById('service-chevron');
+  const label = document.getElementById('service-select-label');
+  const hiddenInput = document.getElementById('form-service-input');
+  const counter = document.getElementById('selected-counter');
+  const clearBtn = document.getElementById('clear-services-btn');
+  const badgesContainer = document.getElementById('selected-badges-container');
+  const checkboxes = document.querySelectorAll('.service-checkbox');
+
+  if (!container || !triggerBtn || !dropdown) return;
+
+  function toggleDropdown(show) {
+    const isHidden = dropdown.classList.contains('hidden');
+    const shouldOpen = show !== undefined ? show : isHidden;
+
+    if (shouldOpen) {
+      dropdown.classList.remove('hidden');
+      triggerBtn.setAttribute('aria-expanded', 'true');
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    } else {
+      dropdown.classList.add('hidden');
+      triggerBtn.setAttribute('aria-expanded', 'false');
+      if (chevron) chevron.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  triggerBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleDropdown();
+  });
+
+  // Close when clicking outside dropdown
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target)) {
+      toggleDropdown(false);
+    }
+  });
+
+  function updateSelected() {
+    const selected = [];
+    checkboxes.forEach(cb => {
+      if (cb.checked) {
+        selected.push({
+          value: cb.value,
+          key: cb.getAttribute('data-key')
+        });
+      }
+    });
+
+    const values = selected.map(s => s.value);
+    if (hiddenInput) {
+      hiddenInput.value = values.join(', ');
+    }
+
+    if (selected.length === 0) {
+      if (label) {
+        label.textContent = 'Seleccione una o varias divisiones...';
+        label.classList.remove('text-[#FFFFFF]');
+        label.classList.add('text-[#5E8588]');
+      }
+      if (counter) counter.textContent = '0 seleccionados';
+      if (badgesContainer) {
+        badgesContainer.innerHTML = '';
+        badgesContainer.classList.add('hidden');
+      }
+    } else if (selected.length === 1) {
+      if (label) {
+        label.textContent = selected[0].value;
+        label.classList.add('text-[#FFFFFF]');
+        label.classList.remove('text-[#5E8588]');
+      }
+      if (counter) counter.textContent = '1 seleccionado';
+      renderBadges(selected);
+    } else {
+      if (label) {
+        label.textContent = `${selected.length} divisiones seleccionadas`;
+        label.classList.add('text-[#FFFFFF]');
+        label.classList.remove('text-[#5E8588]');
+      }
+      if (counter) counter.textContent = `${selected.length} seleccionados`;
+      renderBadges(selected);
+    }
+  }
+
+  function renderBadges(selected) {
+    if (!badgesContainer) return;
+    badgesContainer.innerHTML = '';
+    badgesContainer.classList.remove('hidden');
+
+    selected.forEach(s => {
+      const badge = document.createElement('span');
+      badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] bg-[#142E31] border border-[rgba(229,184,0,0.35)] text-xs text-[#E5B800] font-matter';
+      badge.innerHTML = `
+        <span class="truncate max-w-[210px]">${s.value}</span>
+        <button type="button" data-key="${s.key}" class="remove-badge-btn hover:text-[#FFFFFF] focus:outline-none cursor-pointer" title="Quitar">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M1 1L9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      `;
+      badgesContainer.appendChild(badge);
+    });
+
+    badgesContainer.querySelectorAll('.remove-badge-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const key = btn.getAttribute('data-key');
+        const cb = document.querySelector(`.service-checkbox[data-key="${key}"]`);
+        if (cb) {
+          cb.checked = false;
+          updateSelected();
+        }
+      });
+    });
+  }
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      updateSelected();
+    });
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      checkboxes.forEach(cb => cb.checked = false);
+      updateSelected();
+    });
+  }
+
+  // Global helper to select single service from modal
+  window.selectServiceInMultiSelect = function(serviceKey) {
+    checkboxes.forEach(cb => {
+      if (cb.getAttribute('data-key') === serviceKey) {
+        cb.checked = true;
+      }
+    });
+    updateSelected();
+  };
+
+  // Global helper to reset multiselect on form reset
+  window.resetMultiSelect = function() {
+    checkboxes.forEach(cb => cb.checked = false);
+    updateSelected();
+  };
+}
+
+/**
+ * Form Success Modal Component
+ */
+function initSuccessModal() {
+  const modal = document.getElementById('form-success-modal');
+
+  window.openSuccessModal = function() {
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+  };
+
+  window.closeSuccessModal = function() {
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      window.closeSuccessModal();
+    }
+  });
+}
+
+/**
  * Contact Form Submission with Web3Forms & Mailto fallback
  */
 function initContactForm() {
@@ -650,13 +838,20 @@ function initContactForm() {
     const name = form.nombre.value.trim();
     const email = form.email.value.trim();
     const phone = form.telefono.value.trim();
-    const serviceSelect = form.servicio;
-    const serviceText = serviceSelect.options[serviceSelect.selectedIndex]?.text || '';
+    const serviceInput = document.getElementById('form-service-input');
+    const serviceText = serviceInput ? serviceInput.value.trim() : '';
     const message = form.mensaje.value.trim();
     const terminosCheck = document.getElementById('ley-1581-check');
 
-    if (!name || !email || !phone || !message) {
-      showStatus('Por favor completa todos los campos requeridos (*): Nombre, Correo, Teléfono y Mensaje.', 'error');
+    if (!name || !email || !phone || !message || !serviceText) {
+      showStatus('Por favor completa todos los campos requeridos (*), incluyendo al menos una División / Servicio.', 'error');
+      if (!serviceText) {
+        const triggerBtn = document.getElementById('service-select-btn');
+        if (triggerBtn) {
+          triggerBtn.classList.add('border-red-500');
+          setTimeout(() => triggerBtn.classList.remove('border-red-500'), 3000);
+        }
+      }
       return;
     }
 
@@ -672,6 +867,8 @@ function initContactForm() {
 
     try {
       const formData = new FormData(form);
+      formData.set('servicio', serviceText);
+
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         body: formData
@@ -681,6 +878,12 @@ function initContactForm() {
       if (response.status === 200 && result.success) {
         showStatus('Solicitud recibida exitosamente. Nuestro equipo técnico responderá en menos de 24 horas hábiles.', 'success');
         form.reset();
+        if (window.resetMultiSelect) {
+          window.resetMultiSelect();
+        }
+        if (window.openSuccessModal) {
+          window.openSuccessModal();
+        }
       } else {
         triggerMailto(name, email, phone, serviceText, message);
         showStatus('Se ha abierto su cliente de correo para enviar directamente a info@solucionesgeobim.com.', 'info');
@@ -700,7 +903,7 @@ function initContactForm() {
       `Nombre: ${name}\n` +
       `Email: ${email}\n` +
       `Teléfono: ${phone}\n` +
-      `Servicio: ${service}\n\n` +
+      `Divisiones / Servicios solicitados:\n${service}\n\n` +
       `Detalles del proyecto:\n${message}\n\n` +
       `Consentimiento Ley 1581 de 2012: Autorizado por el titular.`
     );
@@ -709,13 +912,29 @@ function initContactForm() {
 
   function showStatus(text, type) {
     if (!statusMsg) return;
-    statusMsg.classList.remove('hidden', 'bg-red-950/60', 'text-red-300', 'bg-[#142E31]', 'text-[#E5B800]');
+    statusMsg.classList.remove('hidden');
     if (type === 'error') {
-      statusMsg.classList.add('bg-red-950/60', 'text-red-300');
+      statusMsg.className = 'p-4 sm:p-5 rounded-[8px] text-sm sm:text-base mb-6 font-matter border border-red-500/50 bg-red-950/80 text-red-200 flex items-center gap-3';
+      statusMsg.innerHTML = `
+        <svg class="w-6 h-6 flex-shrink-0 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>${text}</span>
+      `;
+    } else if (type === 'info') {
+      statusMsg.className = 'p-4 sm:p-5 rounded-[8px] text-sm sm:text-base mb-6 font-matter border border-[#2E5D61] bg-[#142E31] text-[#D9E2E3] flex items-center gap-3';
+      statusMsg.innerHTML = `
+        <svg class="w-6 h-6 flex-shrink-0 text-[#E5B800]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>${text}</span>
+      `;
     } else {
-      statusMsg.classList.add('bg-[#142E31]', 'text-[#E5B800]');
+      statusMsg.className = 'p-5 sm:p-6 rounded-[8px] text-base sm:text-lg mb-6 font-matter border-2 border-[#E5B800] bg-[#142E31] text-[#FFFFFF] shadow-[0_0_25px_rgba(229,184,0,0.25)] flex items-start sm:items-center gap-3.5';
+      statusMsg.innerHTML = `
+        <svg class="w-7 h-7 flex-shrink-0 text-[#E5B800] mt-0.5 sm:mt-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div>
+          <strong class="block text-[#E5B800] text-base sm:text-lg font-medium mb-1">Solicitud Recibida Exitosamente</strong>
+          <span class="text-[#D9E2E3] text-sm sm:text-base leading-relaxed">Nuestro equipo técnico responderá en menos de 24 horas hábiles.</span>
+        </div>
+      `;
     }
-    statusMsg.textContent = text;
   }
 }
 

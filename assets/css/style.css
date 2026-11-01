@@ -436,3 +436,30 @@ h1, h2, h3, h4, h5, h6, .heading-matter {
   pointer-events: none;
   transform: translateY(12px);
 }
+
+/* Multi-Select Dropdown */
+#service-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: #2E5D61 #071213;
+}
+
+#service-dropdown::-webkit-scrollbar {
+  width: 5px;
+}
+
+#service-dropdown::-webkit-scrollbar-track {
+  background: #071213;
+}
+
+#service-dropdown::-webkit-scrollbar-thumb {
+  background: #2E5D61;
+  border-radius: 3px;
+}
+
+#service-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #5E8588;
+}
+
+.service-option:hover {
+  background-color: rgba(46, 93, 97, 0.4);
+}

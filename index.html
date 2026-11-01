@@ -51,7 +51,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Style Sheet -->
-  <link rel="stylesheet" href="assets/css/style.css?v=1.1.1">
+  <link rel="stylesheet" href="assets/css/style.css?v=1.1.2">
 </head>
 
 <body class="bg-[#0B191B] text-[#A4B9BA] selection:bg-[#E5B800] selection:text-[#071213] antialiased min-h-screen">
@@ -906,30 +906,98 @@
                   <label class="eyebrow-label-sm block mb-2">TELÉFONO DE CONTACTO *</label>
                   <input type="tel" name="telefono" required placeholder="+57 300 000 0000" autocomplete="tel" inputmode="tel" class="input-auros">
                 </div>
-                <div>
-                  <label class="eyebrow-label-sm block mb-2">DIVISIÓN / SERVICIO *</label>
-                  <select id="form-service" name="servicio" required class="input-auros cursor-pointer">
-                    <option value="" disabled selected>Seleccione división...</option>
-                    <optgroup label="Servicios Geo">
-                      <option value="geo-topografia">Fotogrametría y Topografía</option>
-                      <option value="geo-cartografia">Cartografía y Modelos ANLA</option>
-                      <option value="geo-planeacion">Planeación Territorial y Clima</option>
-                      <option value="geo-capacitacion">Capacitaciones Especializadas</option>
-                      <option value="geo-visualizacion">Geoportales y Dashboards</option>
-                    </optgroup>
-                    <optgroup label="Servicios BIM">
-                      <option value="bim-arquitectura">Modelado Arquitectónico BIM</option>
-                      <option value="bim-mep">Modelado de Redes MEP</option>
-                      <option value="bim-estructural">Modelado Estructural</option>
-                      <option value="bim-familias">Familias Paramétricas</option>
-                    </optgroup>
-                    <optgroup label="Servicios GeoBIM">
-                      <option value="geobim-entorno">Análisis de Entorno Urbano</option>
-                      <option value="geobim-ambiental">Análisis Ambiental y Sostenibilidad</option>
-                      <option value="geobim-movilidad">Análisis de Accesibilidad</option>
-                      <option value="geobim-servicios">Infraestructura y Redes</option>
-                    </optgroup>
-                  </select>
+                <div class="relative" id="multiselect-container">
+                  <label class="eyebrow-label-sm block mb-2">DIVISIÓN / SERVICIO (SELECCIÓN MÚLTIPLE) *</label>
+                  
+                  <!-- Trigger button -->
+                  <button type="button" id="service-select-btn" class="input-auros flex items-center justify-between text-left cursor-pointer focus:outline-none min-h-[46px]" aria-expanded="false" aria-haspopup="listbox">
+                    <span id="service-select-label" class="text-[#5E8588] truncate text-sm sm:text-base">Seleccione una o varias divisiones...</span>
+                    <i data-lucide="chevron-down" id="service-chevron" class="w-4 h-4 text-[#A4B9BA] flex-shrink-0 transition-transform duration-200"></i>
+                  </button>
+
+                  <!-- Hidden input containing comma-separated selected services for form submission -->
+                  <input type="hidden" name="servicio" id="form-service-input" required value="">
+
+                  <!-- Dropdown Panel -->
+                  <div id="service-dropdown" class="hidden absolute left-0 right-0 top-full mt-2 bg-[#071213] border border-[rgba(229,184,0,0.35)] rounded-[8px] p-3 shadow-2xl z-40 max-h-72 overflow-y-auto space-y-4">
+                    
+                    <!-- Quick action bar -->
+                    <div class="flex items-center justify-between pb-2 border-b border-[rgba(164,185,186,0.15)] text-[11px] font-matter">
+                      <span class="text-[#A4B9BA]" id="selected-counter">0 seleccionados</span>
+                      <button type="button" id="clear-services-btn" class="text-[#E5B800] hover:underline focus:outline-none cursor-pointer">Limpiar</button>
+                    </div>
+
+                    <!-- Group 1: Servicios Geo -->
+                    <div class="space-y-1">
+                      <div class="eyebrow-label-sm text-[#E5B800] px-1 mb-1">SERVICIOS GEO (5)</div>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Fotogrametría y Topografía" data-key="geo-topografia" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Fotogrametría y Topografía</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Cartografía y Modelos ANLA" data-key="geo-cartografia" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Cartografía y Modelos ANLA</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Planeación Territorial y Clima" data-key="geo-planeacion" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Planeación Territorial y Clima</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Capacitaciones Especializadas" data-key="geo-capacitacion" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Capacitaciones Especializadas</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Geoportales y Dashboards" data-key="geo-visualizacion" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Geoportales y Dashboards</span>
+                      </label>
+                    </div>
+
+                    <!-- Group 2: Servicios BIM -->
+                    <div class="space-y-1 pt-1 border-t border-[rgba(164,185,186,0.1)]">
+                      <div class="eyebrow-label-sm text-[#E5B800] px-1 mb-1">SERVICIOS BIM (4)</div>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Modelado Arquitectónico BIM" data-key="bim-arquitectura" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Modelado Arquitectónico BIM</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Modelado de Redes MEP" data-key="bim-mep" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Modelado de Redes MEP</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Modelado Estructural" data-key="bim-estructural" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Modelado Estructural</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Familias Paramétricas" data-key="bim-familias" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Familias Paramétricas</span>
+                      </label>
+                    </div>
+
+                    <!-- Group 3: Servicios GeoBIM -->
+                    <div class="space-y-1 pt-1 border-t border-[rgba(164,185,186,0.1)]">
+                      <div class="eyebrow-label-sm text-[#E5B800] px-1 mb-1">SERVICIOS INTEGRADOS GEOBIM (4)</div>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Análisis de Entorno Urbano" data-key="geobim-entorno" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Análisis de Entorno Urbano</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Análisis Ambiental y Sostenibilidad" data-key="geobim-ambiental" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Análisis Ambiental y Sostenibilidad</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Análisis de Accesibilidad" data-key="geobim-movilidad" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Análisis de Accesibilidad</span>
+                      </label>
+                      <label class="service-option flex items-center gap-2.5 p-2 rounded-[6px] hover:bg-[#142E31] cursor-pointer transition-colors text-xs sm:text-sm text-[#D9E2E3]">
+                        <input type="checkbox" value="Infraestructura y Redes" data-key="geobim-servicios" class="service-checkbox w-4 h-4 rounded bg-[#0B191B] border border-[rgba(229,184,0,0.4)] text-[#E5B800] accent-[#E5B800] focus:ring-0">
+                        <span>Infraestructura y Redes</span>
+                      </label>
+                    </div>
+
+                  </div>
+
+                  <!-- Selected Badges display below input -->
+                  <div id="selected-badges-container" class="flex flex-wrap gap-1.5 mt-2 hidden"></div>
                 </div>
               </div>
 
@@ -1039,6 +1107,47 @@
   <button id="back-to-top" type="button" aria-label="Volver al inicio" class="hidden-btn fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-30 w-11 h-11 rounded-full bg-[#142E31]/95 hover:bg-[#E5B800] text-[#FFFFFF] hover:text-[#071213] border border-[rgba(229,184,0,0.3)] shadow-lg flex items-center justify-center focus:outline-none cursor-pointer">
     <i data-lucide="chevron-up" class="w-5 h-5"></i>
   </button>
+
+
+  <!-- ==================== FORM SUCCESS MODAL (VENTANA DE CONFIRMACIÓN) ==================== -->
+  <div id="form-success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <!-- Backdrop -->
+    <div onclick="closeSuccessModal()" class="fixed inset-0 modal-overlay"></div>
+
+    <!-- Modal Box -->
+    <div class="relative modal-box max-w-lg w-full p-6 sm:p-9 z-10 text-center space-y-6 border-2 border-[#E5B800]/50 shadow-[0_20px_60px_rgba(0,0,0,0.85)]">
+      <!-- Close icon button top right -->
+      <button onclick="closeSuccessModal()" type="button" aria-label="Cerrar confirmación" class="absolute top-4 right-4 w-9 h-9 rounded-[6px] bg-[#071213] text-[#A4B9BA] hover:text-[#FFFFFF] hover:bg-[#1B3C40] flex items-center justify-center focus:outline-none transition-colors cursor-pointer">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Animated / glowing Icon -->
+      <div class="mx-auto w-16 h-16 rounded-full bg-[#071213] border-2 border-[#E5B800] flex items-center justify-center text-[#E5B800] shadow-[0_0_25px_rgba(229,184,0,0.35)]">
+        <i data-lucide="check-circle-2" class="w-9 h-9"></i>
+      </div>
+
+      <!-- Text Stack -->
+      <div class="space-y-3">
+        <span class="eyebrow-label text-[#E5B800]">TRANSMISIÓN CONFIRMADA</span>
+        <h3 class="text-2xl sm:text-3xl font-matter font-medium text-[#FFFFFF] tracking-tight">
+          Solicitud recibida exitosamente
+        </h3>
+        <p class="text-base sm:text-lg text-[#D9E2E3] font-matter leading-relaxed">
+          Nuestro equipo técnico responderá en menos de <strong class="text-[#E5B800]">24 horas hábiles</strong>.
+        </p>
+        <p class="text-xs text-[#A4B9BA] pt-3 border-t border-[rgba(164,185,186,0.15)] leading-relaxed">
+          Hemos recibido sus requerimientos técnicos. En breve un ingeniero especialista se pondrá en contacto para estructurar su propuesta técnica y económica.
+        </p>
+      </div>
+
+      <!-- Accept Button -->
+      <div class="pt-2">
+        <button onclick="closeSuccessModal()" type="button" class="btn-signature w-full sm:w-auto px-10 py-3.5 text-sm font-semibold cursor-pointer">
+          <span>Aceptar</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
 
   <!-- ==================== SERVICE DETAIL MODAL ==================== -->
@@ -1304,7 +1413,7 @@
 
 
   <!-- Custom JS -->
-  <script src="assets/js/main.js?v=1.1.1"></script>
+  <script src="assets/js/main.js?v=1.1.2"></script>
 
 </body>
 </html>
