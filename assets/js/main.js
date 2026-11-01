@@ -239,7 +239,6 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * 3D Particle Sphere Visual (GeoBIM Bioluminescent Data Orb)
  * Rendered using GeoBIM brand colors (#E5B800, #2E5D61, #5E8588, #D9E2E3, #FFFFFF)
- * Maintains continuous perpetual rotation across mobile and desktop.
  */
 function initParticleSphere() {
   const canvas = document.getElementById('hero-particle-canvas');
@@ -250,7 +249,7 @@ function initParticleSphere() {
   let width, height;
   let particles = [];
   const particleCount = 1400;
-  let radius = 280;
+  const radius = 280;
 
   // Colors strictly mapped to GeoBIM official brand palette
   const colors = [
@@ -266,14 +265,11 @@ function initParticleSphere() {
     const parent = canvas.parentElement;
     width = parent.clientWidth;
     height = Math.min(window.innerHeight * 0.85, 750);
-    radius = width < 640 ? Math.min(width * 0.38, 280) : 280;
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    canvas.width = width * window.devicePixelRatio;
+    canvas.height = height * window.devicePixelRatio;
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(dpr, dpr);
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   }
 
   function createParticles() {
@@ -283,6 +279,9 @@ function initParticleSphere() {
       const theta = Math.sqrt(particleCount * Math.PI) * phi;
 
       particles.push({
+        x: radius * Math.cos(theta) * Math.sin(phi),
+        y: radius * Math.sin(theta) * Math.sin(phi),
+        z: radius * Math.cos(phi),
         baseX: radius * Math.cos(theta) * Math.sin(phi),
         baseY: radius * Math.sin(theta) * Math.sin(phi),
         baseZ: radius * Math.cos(phi),
@@ -303,7 +302,6 @@ function initParticleSphere() {
     const cx = width / 2;
     const cy = height / 2;
 
-    // Continuous uninterrupted rotation
     angleX += rotSpeedX;
     angleY += rotSpeedY;
 
