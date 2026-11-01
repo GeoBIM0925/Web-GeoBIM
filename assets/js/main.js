@@ -240,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Legal Modals & Cookie Banner
   initLegalModals();
   initCookieBanner();
+  initClarity();
 });
 
 /**
@@ -825,6 +826,8 @@ function initSuccessModal() {
 /**
  * Contact Form Submission with Web3Forms & Mailto fallback
  */
+const GOOGLE_SHEETS_CRM_URL = 'https://script.google.com/macros/s/AKfycbzjgjCfqTediqb5rW4A8Hv7K7gkNdB3WGZDennkcX61oYbYve64wyww6zhLSL8Cm5F1/exec';
+
 function initContactForm() {
   const form = document.getElementById('quote-form');
   const statusMsg = document.getElementById('form-status');
@@ -917,6 +920,29 @@ function initContactForm() {
     try {
       const formData = new FormData(form);
       formData.set('servicio', serviceText);
+
+      // Sincronización en tiempo real con Base de Datos CRM en Google Sheets
+      if (GOOGLE_SHEETS_CRM_URL) {
+        try {
+          const crmParams = new URLSearchParams();
+          crmParams.append('nombre', name);
+          crmParams.append('email', email);
+          crmParams.append('telefono', phone);
+          crmParams.append('servicio', serviceText);
+          crmParams.append('mensaje', message);
+
+          fetch(GOOGLE_SHEETS_CRM_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: crmParams.toString()
+          }).catch(err => console.warn('CRM sync notice:', err));
+        } catch (crmErr) {
+          console.warn('CRM execution notice:', crmErr);
+        }
+      }
 
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -1124,3 +1150,30 @@ function initCookieBanner() {
     });
   }
 }
+
+
+/**
+ * Microsoft Clarity Heatmap & Behavior Analytics
+ * Project ID: z6vuds1101
+ * Loaded conditionally in strict compliance with Colombian Data Protection (Ley 1581 de 2012 / SIC)
+ */
+const CLARITY_PROJECT_ID = 'z6vuds1101';
+
+function initClarity() {
+  if (window._clarityLoaded) return;
+  if (!window.hasConsent || !window.hasConsent('analytics')) return;
+  window._clarityLoaded = true;
+
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, 'clarity', 'script', CLARITY_PROJECT_ID);
+}
+
+// Reactively trigger Clarity as soon as the visitor accepts analytics cookies
+window.addEventListener('geobim:consent_updated', function(e) {
+  if (e.detail && e.detail.analytics) {
+    initClarity();
+  }
+});

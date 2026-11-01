@@ -56,6 +56,8 @@ Diseñado con una estética técnica de alta precisión (*Auros Dark*):
 - **Lucide Icons:** Iconografía vectorial técnica y limpia.
 - **HTML5 Canvas:** Esfera bioluminiscente interactiva de partículas 3D adaptativa.
 - **Web3Forms API:** Recepción directa y segura de prospectos en `info@solucionesgeobim.com` sin abrir clientes de correo.
+- **CRM Cloud en Tiempo Real (Google Sheets):** Registro automatizado de prospectos con ID serial (GB-YYYY-####), fecha/hora colombiana, servicios y trazabilidad legal de Habeas Data.
+- **Analítica de Puntos Calientes (Microsoft Clarity):** Mapas de calor de clics, profundidad de scroll y grabaciones anónimas de sesión activadas según consentimiento.
 - **Cumplimiento Legal Colombiano:**
   - Checkbox obligatorio y modal para la **Ley 1581 de 2012** (Tratamiento de Datos Personales).
   - Banner interactivo de política de cookies persistente en `localStorage`.
