@@ -1,0 +1,13 @@
+<IfModule mod_headers.c>
+  # Clickjacking Protection
+  Header always set X-Frame-Options "SAMEORIGIN"
+  
+  # MIME-Sniffing Protection
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # Referrer Protection
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Feature / Permissions Restrictions
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+</IfModule>

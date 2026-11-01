@@ -9,6 +9,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+  <!-- Security Headers (MIME sniffing & Referrer protection) -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/img/emblem-tight.svg">
 
@@ -889,6 +893,9 @@
               <input type="hidden" name="access_key" value="b5b934ce-4de5-4466-89bb-33c7ef0ce006">
               <input type="hidden" name="subject" value="Nueva Solicitud de Proyecto - Portal GeoBIM">
               <input type="hidden" name="from_name" value="GeoBIM Soluciones Espaciales">
+              <!-- Web3Forms Honeypot Anti-Spam & Submission Timing Verification -->
+              <input type="checkbox" name="botcheck" class="hidden" style="display: none !important;" tabindex="-1" autocomplete="off">
+              <input type="hidden" name="_form_time" id="form-render-time">
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
@@ -1094,6 +1101,10 @@
           <span>·</span>
           <button type="button" onclick="openCookiesPolicyModal()" class="hover:text-[#E5B800] transition-colors underline focus:outline-none">
             Política de Cookies
+          </button>
+          <span>•</span>
+          <button type="button" onclick="openCookieBannerPreferences()" class="hover:text-[#E5B800] transition-colors underline focus:outline-none">
+            Preferencias de Cookies
           </button>
         </div>
         <p>Identidad GeoBIM · Arquitectura Auros.</p>

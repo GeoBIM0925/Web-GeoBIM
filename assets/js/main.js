@@ -832,8 +832,57 @@ function initContactForm() {
 
   if (!form) return;
 
+  // Track initial render timestamp for anti-bot speed verification
+  const formRenderTime = Date.now();
+  const renderTimeInput = document.getElementById('form-render-time');
+  if (renderTimeInput) {
+    renderTimeInput.value = formRenderTime.toString();
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // 1. Anti-Bot Honeypot verification
+    const botcheck = form.querySelector('input[name="botcheck"]');
+    if (botcheck && (botcheck.checked || (botcheck.value && botcheck.value !== ''))) {
+      console.warn('Bot detection: honeypot triggered.');
+      showStatus('Solicitud recibida exitosamente.', 'success');
+      form.reset();
+      return;
+    }
+
+    // 2. Anti-Bot Submission speed verification (< 2.0 seconds)
+    const timeElapsed = Date.now() - formRenderTime;
+    if (timeElapsed < 2000) {
+      showStatus('Por favor complete su solicitud a un ritmo natural para verificación de seguridad.', 'error');
+      return;
+    }
+
+    // 3. Client-Side Rate Limiting (max 5 submissions per 15 min, min 15s cooldown)
+    const RATE_KEY = 'geobim_form_submissions';
+    const now = Date.now();
+    let submissions = [];
+    try {
+      submissions = JSON.parse(localStorage.getItem(RATE_KEY) || '[]');
+      if (!Array.isArray(submissions)) submissions = [];
+    } catch (err) {
+      submissions = [];
+    }
+    // Retain only timestamps from the last 15 minutes (900,000 ms)
+    submissions = submissions.filter(ts => (now - ts) < 900000);
+
+    if (submissions.length > 0) {
+      const lastSub = submissions[submissions.length - 1];
+      if (now - lastSub < 15000) {
+        showStatus('Por favor espere unos segundos antes de enviar una nueva solicitud.', 'error');
+        return;
+      }
+    }
+
+    if (submissions.length >= 5) {
+      showStatus('Ha alcanzado el límite de solicitudes recientes. Por favor intente más tarde o contáctenos por WhatsApp.', 'error');
+      return;
+    }
 
     const name = form.nombre.value.trim();
     const email = form.email.value.trim();
@@ -876,6 +925,10 @@ function initContactForm() {
       const result = await response.json();
 
       if (response.status === 200 && result.success) {
+        submissions.push(now);
+        try {
+          localStorage.setItem(RATE_KEY, JSON.stringify(submissions));
+        } catch (err) {}
         showStatus('Solicitud recibida exitosamente. Nuestro equipo técnico responderá en menos de 24 horas hábiles.', 'success');
         form.reset();
         if (window.resetMultiSelect) {
@@ -982,13 +1035,71 @@ function initLegalModals() {
 }
 
 /**
- * Cookie Consent Banner
+ * Cookie Consent Management & Conditioning
  */
+const CONSENT_STORAGE_KEY = 'geobim_cookies_consent';
+
+window.hasConsent = function(category) {
+  if (category === 'essential') return true;
+  try {
+    const raw = localStorage.getItem(CONSENT_STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed[category]);
+  } catch (e) {
+    return localStorage.getItem(CONSENT_STORAGE_KEY) === 'all';
+  }
+};
+
+window.setConsentChoice = function(choice) {
+  const banner = document.getElementById('cookie-banner');
+  const consentData = {
+    essential: true,
+    preferences: choice === 'all',
+    analytics: choice === 'all',
+    timestamp: Date.now()
+  };
+
+  try {
+    localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consentData));
+  } catch (err) {}
+
+  if (choice === 'essential') {
+    try {
+      sessionStorage.removeItem('geobim_telemetry');
+      localStorage.removeItem('geobim_analytics_session');
+    } catch (err) {}
+  }
+
+  if (banner) {
+    banner.classList.add('hidden');
+  }
+
+  window.dispatchEvent(new CustomEvent('geobim:consent_updated', { detail: consentData }));
+};
+
+window.openCookieBannerPreferences = function() {
+  const banner = document.getElementById('cookie-banner');
+  if (banner) {
+    banner.classList.remove('hidden');
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+};
+
 function initCookieBanner() {
   const banner = document.getElementById('cookie-banner');
   if (!banner) return;
 
-  const consent = localStorage.getItem('geobim_cookies_consent');
+  let consent = null;
+  try {
+    const raw = localStorage.getItem(CONSENT_STORAGE_KEY);
+    if (raw) consent = JSON.parse(raw);
+  } catch (e) {
+    consent = localStorage.getItem(CONSENT_STORAGE_KEY);
+  }
+
   if (!consent) {
     setTimeout(() => {
       banner.classList.remove('hidden');
@@ -1003,15 +1114,13 @@ function initCookieBanner() {
 
   if (acceptAllBtn) {
     acceptAllBtn.addEventListener('click', () => {
-      localStorage.setItem('geobim_cookies_consent', 'all');
-      banner.classList.add('hidden');
+      window.setConsentChoice('all');
     });
   }
 
   if (acceptEssBtn) {
     acceptEssBtn.addEventListener('click', () => {
-      localStorage.setItem('geobim_cookies_consent', 'essential');
-      banner.classList.add('hidden');
+      window.setConsentChoice('essential');
     });
   }
 }
