@@ -845,23 +845,21 @@ function initContactForm() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 1. Anti-Bot Honeypot verification
+    // 1. Anti-Bot Honeypot verification (strictly checkbox checked)
     const botcheck = form.querySelector('input[name="botcheck"]');
-    if (botcheck && (botcheck.checked || (botcheck.value && botcheck.value !== ''))) {
+    if (botcheck && botcheck.checked) {
       console.warn('Bot detection: honeypot triggered.');
-      showStatus('Solicitud recibida exitosamente.', 'success');
-      form.reset();
       return;
     }
 
-    // 2. Anti-Bot Submission speed verification (< 2.0 seconds)
+    // 2. Anti-Bot Submission speed verification (< 1.0 second)
     const timeElapsed = Date.now() - formRenderTime;
-    if (timeElapsed < 2000) {
+    if (timeElapsed < 1000) {
       showStatus('Por favor complete su solicitud a un ritmo natural para verificación de seguridad.', 'error');
       return;
     }
 
-    // 3. Client-Side Rate Limiting (max 5 submissions per 15 min, min 15s cooldown)
+    // 3. Client-Side Rate Limiting (max 15 submissions per 15 min, min 3s cooldown)
     const RATE_KEY = 'geobim_form_submissions';
     const now = Date.now();
     let submissions = [];
@@ -871,19 +869,18 @@ function initContactForm() {
     } catch (err) {
       submissions = [];
     }
-    // Retain only timestamps from the last 15 minutes (900,000 ms)
     submissions = submissions.filter(ts => (now - ts) < 900000);
 
     if (submissions.length > 0) {
       const lastSub = submissions[submissions.length - 1];
-      if (now - lastSub < 15000) {
+      if (now - lastSub < 3000) {
         showStatus('Por favor espere unos segundos antes de enviar una nueva solicitud.', 'error');
         return;
       }
     }
 
-    if (submissions.length >= 5) {
-      showStatus('Ha alcanzado el límite de solicitudes recientes. Por favor intente más tarde o contáctenos por WhatsApp.', 'error');
+    if (submissions.length >= 15) {
+      showStatus('Ha alcanzado el límite de solicitudes recientes. Por favor contáctenos directamente por WhatsApp.', 'error');
       return;
     }
 
@@ -944,9 +941,26 @@ function initContactForm() {
         }
       }
 
+      // Payload estructurado en JSON para entrega garantizada vía Web3Forms API
+      const payload = {
+        access_key: form.access_key.value,
+        subject: form.subject.value,
+        from_name: form.from_name.value,
+        nombre: name,
+        email: email,
+        telefono: phone,
+        servicio: serviceText,
+        mensaje: message,
+        terminos_ley_1581: 'Aceptado (Ley 1581 v1.0)'
+      };
+
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
       });
       const result = await response.json();
 
@@ -1056,6 +1070,7 @@ function initLegalModals() {
     if (e.key === 'Escape') {
       closeDataPolicyModal();
       closeCookiesPolicyModal();
+      if (window.closeCookiePreferencesModal) window.closeCookiePreferencesModal();
     }
   });
 }
@@ -1105,13 +1120,46 @@ window.setConsentChoice = function(choice) {
 };
 
 window.openCookieBannerPreferences = function() {
-  const banner = document.getElementById('cookie-banner');
-  if (banner) {
-    banner.classList.remove('hidden');
+  const modal = document.getElementById('cookie-preferences-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    // Update active status badge
+    const badge = document.getElementById('analytics-status-badge');
+    if (badge && window.hasConsent) {
+      const isAnalyticsActive = window.hasConsent('analytics');
+      if (isAnalyticsActive) {
+        badge.textContent = 'Activas';
+        badge.className = 'text-[10px] uppercase font-bold tracking-wider text-[#E5B800] bg-[#142E31] px-2 py-0.5 rounded';
+      } else {
+        badge.textContent = 'Inactivas';
+        badge.className = 'text-[10px] uppercase font-bold tracking-wider text-[#5E8588] bg-[#071213] border border-[#142E31] px-2 py-0.5 rounded';
+      }
+    }
+
     if (window.lucide) {
       window.lucide.createIcons();
     }
+  } else {
+    const banner = document.getElementById('cookie-banner');
+    if (banner) {
+      banner.classList.remove('hidden');
+    }
   }
+};
+
+window.closeCookiePreferencesModal = function() {
+  const modal = document.getElementById('cookie-preferences-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+};
+
+window.savePreferencesChoice = function(choice) {
+  window.setConsentChoice(choice);
+  window.closeCookiePreferencesModal();
 };
 
 function initCookieBanner() {

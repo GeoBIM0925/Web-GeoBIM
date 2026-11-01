@@ -55,7 +55,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Style Sheet -->
-  <link rel="stylesheet" href="assets/css/style.css?v=1.1.2">
+  <link rel="stylesheet" href="assets/css/style.css?v=1.1.3">
 </head>
 
 <body class="bg-[#0B191B] text-[#A4B9BA] selection:bg-[#E5B800] selection:text-[#071213] antialiased min-h-screen">
@@ -894,7 +894,7 @@
               <input type="hidden" name="subject" value="Nueva Solicitud de Proyecto - Portal GeoBIM">
               <input type="hidden" name="from_name" value="GeoBIM Soluciones Espaciales">
               <!-- Web3Forms Honeypot Anti-Spam & Submission Timing Verification -->
-              <input type="checkbox" name="botcheck" class="hidden" style="display: none !important;" tabindex="-1" autocomplete="off">
+              <input type="checkbox" name="botcheck" class="hidden" style="display: none !important;" tabindex="-1" autocomplete="off" value="">
               <input type="hidden" name="_form_time" id="form-render-time">
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
@@ -1394,6 +1394,75 @@
   </div>
 
 
+
+  <!-- ==================== MODAL PREFERENCIAS DE COOKIES ==================== -->
+  <div id="cookie-preferences-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <!-- Backdrop -->
+    <div onclick="closeCookiePreferencesModal()" class="fixed inset-0 modal-overlay"></div>
+
+    <!-- Modal Box -->
+    <div class="relative modal-box max-w-lg w-full p-5 sm:p-8 z-10 space-y-5 text-left border-2 border-[rgba(229,184,0,0.4)] shadow-[0_20px_60px_rgba(0,0,0,0.85)]">
+      <!-- Header -->
+      <div class="flex items-start justify-between border-b border-[rgba(164,185,186,0.15)] pb-4">
+        <div>
+          <span class="eyebrow-label-sm text-[#E5B800]">CONFIGURACIÓN DE PRIVACIDAD</span>
+          <h3 class="text-xl sm:text-2xl font-matter font-medium text-[#FFFFFF] mt-1">
+            Preferencias de Cookies
+          </h3>
+          <p class="text-xs text-[#5E8588] font-matter mt-0.5">
+            GeoBIM Soluciones Espaciales S.A.S.
+          </p>
+        </div>
+        <button onclick="closeCookiePreferencesModal()" type="button" aria-label="Cerrar preferencias" class="w-9 h-9 rounded-[6px] bg-[#071213] text-[#A4B9BA] hover:text-[#FFFFFF] hover:bg-[#1B3C40] flex items-center justify-center focus:outline-none transition-colors cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="space-y-4 text-xs text-[#A4B9BA] leading-relaxed">
+        <p>
+          Seleccione las categorías de cookies que autoriza almacenar en su navegador mientras consulta los servicios y geoportales de GeoBIM:
+        </p>
+
+        <div class="p-3.5 rounded-[8px] bg-[#071213] border border-[rgba(164,185,186,0.15)] space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-medium text-[#FFFFFF] text-sm flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-[#E5B800]"></i>
+              Cookies Técnicas Esenciales
+            </span>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-[#E5B800] bg-[#142E31] px-2 py-0.5 rounded">Obligatorias</span>
+          </div>
+          <p class="text-[11px] text-[#A4B9BA]">
+            Garantizan la interactividad de la esfera 3D de partículas, la navegación fluida y la seguridad de los terminales de contacto. No pueden desactivarse.
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-[8px] bg-[#071213] border border-[rgba(164,185,186,0.15)] space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-medium text-[#FFFFFF] text-sm flex items-center gap-2">
+              <i data-lucide="activity" class="w-4 h-4 text-[#5E8588]"></i>
+              Cookies Analíticas (Microsoft Clarity)
+            </span>
+            <span id="analytics-status-badge" class="text-[10px] uppercase font-bold tracking-wider text-[#5E8588] bg-[#142E31] px-2 py-0.5 rounded">Opcional</span>
+          </div>
+          <p class="text-[11px] text-[#A4B9BA]">
+            Permiten generar mapas de calor y grabaciones disociadas de navegación para optimizar tiempos de respuesta de los geovisores. Toda información sensible se enmascara automáticamente.
+          </p>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="pt-3 border-t border-[rgba(164,185,186,0.15)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+        <button onclick="savePreferencesChoice('essential')" type="button" class="btn-teal-action px-5 py-2.5 text-xs text-center cursor-pointer">
+          <span>Solo Esenciales</span>
+        </button>
+        <button onclick="savePreferencesChoice('all')" type="button" class="btn-signature px-6 py-2.5 text-xs font-semibold text-center cursor-pointer">
+          <span>Aceptar Todas</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== BANNER DE CONSENTIMIENTO DE COOKIES ==================== -->
   <div id="cookie-banner" class="hidden fixed bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 md:left-auto md:right-8 md:max-w-lg z-40 bg-[#071213]/95 backdrop-blur-md border border-[rgba(229,184,0,0.35)] rounded-[12px] p-4 sm:p-5 shadow-2xl transition-all">
     <div class="flex items-start gap-3 sm:gap-4">
@@ -1424,7 +1493,7 @@
 
 
   <!-- Custom JS -->
-  <script src="assets/js/main.js?v=1.1.2"></script>
+  <script src="assets/js/main.js?v=1.1.3"></script>
 
 </body>
 </html>
