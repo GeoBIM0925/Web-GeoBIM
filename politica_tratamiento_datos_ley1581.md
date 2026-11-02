@@ -1,12 +1,12 @@
 # POLÍTICA DE TRATAMIENTO Y PROTECCIÓN DE DATOS PERSONALES
 ## Conforme a la Ley Estatutaria 1581 de 2012 y el Decreto Reglamentario 1377 de 2013
-### GeoBIM Soluciones Espaciales S.A.S.
+### Fractal Innovations S.A.S.
 
 ---
 
 ## 1. IDENTIFICACIÓN DEL RESPONSABLE DEL TRATAMIENTO
 
-- **Razón Social:** GeoBIM Soluciones Espaciales S.A.S.
+- **Razón Social:** Fractal Innovations S.A.S.
 - **NIT:** 901.990.078-9
 - **Domicilio Principal:** Bogotá D.C., Colombia
 - **Correo Electrónico de Contacto:** info@solucionesgeobim.com
@@ -65,7 +65,7 @@ De conformidad con el artículo 8 de la Ley 1581 de 2012, el titular de los dato
 
 La recolección de los datos personales en la plataforma web de GeoBIM se realiza mediando la autorización previa, expresa e informada del titular, la cual se manifiesta mediante la activación voluntaria de la casilla de verificación (checkbox) habilitada en el formulario de contacto con el siguiente enunciado:
 
-> *"Acepto la recolección y tratamiento de mis datos personales (Nombre, Correo y Teléfono de contacto) conforme a la Ley 1581 de 2012 y la Política de Protección de Datos de GeoBIM Soluciones Espaciales para fines de atención comercial y técnica."*
+> *"Acepto la recolección y tratamiento de mis datos personales (Nombre, Correo y Teléfono de contacto) conforme a la Ley 1581 de 2012 y la Política de Protección de Datos de Fractal Innovations S.A.S. para fines de atención comercial y técnica."*
 
 ---
 
@@ -100,6 +100,6 @@ La presente Política rige a partir de la fecha de su publicación en el portal 
 
 Cualquier cambio sustancial en la presente Política será comunicado oportunamente a través de nuestro sitio web institucional antes de su puesta en aplicación.
 
-**GeoBIM Soluciones Espaciales S.A.S.**  
+**Fractal Innovations S.A.S.**  
 *Bogotá D.C., Colombia*  
 Contacto: info@solucionesgeobim.com · Tel: +57 318 235 90 73
