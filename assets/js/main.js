@@ -23,10 +23,10 @@ const servicesData = {
   },
   'geo-cartografia': {
     category: 'SERVICIOS GEO',
-    title: 'Cartografía y Modelos ANLA',
+    title: 'Servicios de Cartografía y Modelos ANLA',
     image: 'assets/img/services/cartografia-modelos-anla.png',
-    summary: 'Cartografía temática y estructuración bajo estándares normativos ANLA y POT.',
-    description: 'Estructuración integral de bases de datos espaciales y cartografía oficial para cumplimiento riguroso de autoridades ambientales y entes territoriales.',
+    summary: 'Servicios de cartografía temática y estructuración bajo estándares normativos ANLA y POT.',
+    description: 'Estructuración integral de bases de datos espaciales y servicios de cartografía oficial para cumplimiento riguroso de autoridades ambientales y entes territoriales.',
     items: [
       'Cartografía para Planes de Ordenamiento Territorial (POT, PBOT, EOT)',
       'Generación de cartografía base y temática digital y análoga',
@@ -54,10 +54,10 @@ const servicesData = {
   },
   'geo-capacitacion': {
     category: 'SERVICIOS GEO',
-    title: 'Capacitaciones Especializadas',
+    title: 'Consultoría en Sistemas de Información Geográfica & Capacitaciones',
     image: 'assets/img/services/capacitacion-especializada.jpg',
-    summary: 'Formación corporativa y consultoría estratégica en metodologías SIG y BIM.',
-    description: 'Transferencia de conocimiento técnico aplicado y diseño de flujos de trabajo eficientes para equipos de ingeniería, arquitectura y entidades gubernamentales.',
+    summary: 'Consultoría en sistemas de información geográfica (SIG) y formación técnica especializada.',
+    description: 'Consultoría en sistemas de información geográfica, transferencia de conocimiento técnico aplicado y diseño de flujos de trabajo eficientes para equipos de ingeniería, arquitectura y entidades gubernamentales.',
     items: [
       'Capacitación práctica en SIG (ArcGIS Pro, QGIS, bases de datos espaciales)',
       'Capacitación en metodologías y software BIM (Autodesk Revit, Navisworks, gestión IFC)',
@@ -69,10 +69,10 @@ const servicesData = {
   },
   'geo-visualizacion': {
     category: 'SERVICIOS GEO',
-    title: 'Geoportales y Dashboards',
+    title: 'Geovisores, Geoportales & Dashboards',
     image: 'assets/img/services/imagen-geovisor.jpg',
     summary: 'Geovisores web interactivos y tableros de control para monitoreo continuo.',
-    description: 'Soluciones interactivas en la nube para democratizar el acceso a la información espacial y facilitar el seguimiento visual de indicadores de proyectos.',
+    description: 'Desarrollo de geovisores interactivos y geoportales dinámicos en la nube para democratizar el acceso a la información espacial y facilitar el seguimiento visual de proyectos.',
     items: [
       'Desarrollo de geoportales y geovisores web dinámicos a medida',
       'Creación de dashboards interactivos de control de proyectos territoriales y constructivos',

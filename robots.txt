@@ -1,0 +1,12 @@
+# Robots.txt - GeoBIM Soluciones Espaciales S.A.S.
+# Dominio: https://www.geobimsolucionesespaciales.com/
+
+User-agent: *
+Allow: /
+
+# Exclusión de scripts de automatización local
+Disallow: /*.bat$
+Disallow: /*.py$
+
+# Mapa del sitio oficial
+Sitemap: https://www.geobimsolucionesespaciales.com/sitemap.xml
